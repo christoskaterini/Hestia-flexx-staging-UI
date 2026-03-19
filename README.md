@@ -92,7 +92,7 @@ Security and caching plugins break staging environments in predictable ways — 
 
 **Security & login:** `wordfence`, `all-in-one-wp-security-and-firewall`, `ithemes-security`, `better-wp-security`, `sucuri-scanner`, `sg-security`, `wp-cerber`, `shield-security`, `defender-security`, `loginizer`, `limit-login-attempts-reloaded`, `two-factor-authentication`
 
-**Caching & performance:** `w3-total-cache`, `litespeed-cache`, `wp-super-cache`, `wp-fastest-cache`, `sg-cachepress`, `wp-rocket`, `autoptimize`, `wp-optimize`, `breeze`, `hummingbird-performance`
+**Caching & performance:** `w3-total-cache`, `litespeed-cache`, `wp-super-cache`, `wp-fastest-cache`, `sg-cachepress`, `wp-rocket`, `autoptimize`, `wp-optimize`, `breeze`, `hummingbird-performance`, `imagify`, `nginx-helper`, `phastpress`, `redis-cache`
 
 **Other:** `redirection`, `simple-301-redirects`, `safe-svg`
 

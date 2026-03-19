@@ -331,21 +331,44 @@ if [ "$SYNC_TYPE" == "2" ] || [ "$SYNC_TYPE" == "3" ]; then
         run_wp config set FORCE_SSL_ADMIN false --path="$TARGET_PATH" --raw --quiet || true
     fi
 
+    echo "--> Flushing cache before plugin deactivation..."
+    run_wp cache flush --path="$TARGET_PATH" --quiet 2>/dev/null || true
+
     echo "--> Deactivating security, caching, and redirect plugins on target..."
     run_wp plugin deactivate \
-        all-in-one-wp-security-and-firewall wordfence ithemes-security better-wp-security \
-        sucuri-scanner sg-security wp-cerber shield-security defender-security \
-        loginizer limit-login-attempts-reloaded two-factor-authentication \
-        w3-total-cache litespeed-cache wp-super-cache wp-fastest-cache sg-cachepress \
-        wp-rocket autoptimize wp-optimize breeze hummingbird-performance \
-        redirection simple-301-redirects safe-svg \
+        all-in-one-wp-security-and-firewall \
+        autoptimize \
+        better-wp-security \
+        breeze \
+        defender-security \
+        hummingbird-performance \
+        imagify \
+        ithemes-security \
+        limit-login-attempts-reloaded \
+        litespeed-cache \
+        loginizer \
+        nginx-helper \
+        phastpress \
+        redirection \
+        redis-cache \
+        safe-svg \
+        sg-cachepress \
+        sg-security \
+        shield-security \
+        simple-301-redirects \
+        sucuri-scanner \
+        two-factor-authentication \
+        w3-total-cache \
+        wp-cerber \
+        wp-fastest-cache \
+        wp-optimize \
+        wp-rocket \
+        wp-super-cache \
+        wordfence \
         --path="$TARGET_PATH" --quiet 2>/dev/null || true
 
     echo "--> Flushing permalinks..."
     run_wp rewrite flush --hard --path="$TARGET_PATH" --quiet
-
-    echo "--> Flushing object cache..."
-    run_wp cache flush --path="$TARGET_PATH" --quiet
 
     echo "--> Database sync complete."
 fi
