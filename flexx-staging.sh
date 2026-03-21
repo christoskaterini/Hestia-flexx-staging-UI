@@ -294,9 +294,7 @@ if [ "$SYNC_TYPE" == "2" ] || [ "$SYNC_TYPE" == "3" ]; then
     EXACT_OLD_URL=$(run_wp option get siteurl --path="$SOURCE_PATH" --quiet)
 
     PROTOCOL="https://"
-    if [ "$CREATE_TARGET" = true ]; then
-        PROTOCOL="http://"  # freshly provisioned domains have no SSL cert yet
-    elif [[ "$EXACT_OLD_URL" == http://* ]]; then
+    if [[ "$EXACT_OLD_URL" == http://* ]]; then
         PROTOCOL="http://"
     fi
     NEW_URL="${PROTOCOL}${TARGET_DOM}"
@@ -387,6 +385,23 @@ if [ "$SYNC_TYPE" == "2" ] || [ "$SYNC_TYPE" == "3" ]; then
     run_wp rewrite flush --hard --path="$TARGET_PATH" --quiet
 
     echo "--> Database sync complete."
+
+    if [ "$CREATE_TARGET" = true ] && [ "$PROTOCOL" = "https://" ]; then
+    	echo ""
+    	echo "=========================================="
+    	echo "  ⚠️  SSL REQUIRED FOR STAGING SITE"
+    	echo "=========================================="
+    	echo "  Staging URL set to https://$TARGET_DOM"
+    	echo "  to match your live site."
+    	echo ""
+    	echo "  If SSL is not enabled the site will"
+    	echo "  not load. Enable it now:"
+    	echo ""
+    	echo "  HestiaCP → Web → $TARGET_DOM → SSL"
+    	echo "  → Enable Let's Encrypt"
+    	echo "=========================================="
+    	echo ""
+	fi
 fi
 
 if [ "$SYNC_TYPE" != "1" ] && [ "$SYNC_TYPE" != "2" ] && [ "$SYNC_TYPE" != "3" ]; then
