@@ -337,33 +337,49 @@ if [ "$SYNC_TYPE" == "2" ] || [ "$SYNC_TYPE" == "3" ]; then
     echo "--> Deactivating security, caching, and redirect plugins on target..."
     run_wp plugin deactivate \
         all-in-one-wp-security-and-firewall \
+        anti-malware \
         autoptimize \
         better-wp-security \
         breeze \
+        bulletproof-security \
+        comet-cache \
         defender-security \
+        flying-press \
         hummingbird-performance \
         imagify \
         ithemes-security \
+        jetpack \
         limit-login-attempts-reloaded \
         litespeed-cache \
         loginizer \
+        malcare-security \
+        miniorange-2-factor-authentication \
         nginx-helper \
+        nitropack \
         phastpress \
+        really-simple-ssl \
         redirection \
         redis-cache \
         safe-svg \
+        secupress \
+        security-ninja \
         sg-cachepress \
         sg-security \
         shield-security \
         simple-301-redirects \
+        solid-security \
         sucuri-scanner \
+        swift-performance \
+        swift-performance-lite \
         two-factor-authentication \
         w3-total-cache \
         wp-cerber \
         wp-fastest-cache \
+        wp-hide-security-enhancer \
         wp-optimize \
         wp-rocket \
         wp-super-cache \
+        wps-hide-login \
         wordfence \
         --path="$TARGET_PATH" --quiet 2>/dev/null || true
 

@@ -30,6 +30,7 @@ Always take a manual database backup before pushing staging back to production.
 ## Installation
 
 ```bash
+rm -rf /tmp/Hestia-flexx-staging-UI && \
 git clone https://github.com/christoskaterini/Hestia-flexx-staging-UI.git /tmp/Hestia-flexx-staging-UI
 cd /tmp/Hestia-flexx-staging-UI
 sudo bash install-ui.sh
@@ -88,11 +89,56 @@ The **key icon** appears next to any domain where a `wp-config.php` is detected.
 
 Security and caching plugins break staging environments in predictable ways — firewalls block staging IPs, caches serve live URLs, login limiters lock you out. The sync automatically deactivates these plugin slugs on the **target** after a database sync:
 
-**Security & login:** `wordfence`, `all-in-one-wp-security-and-firewall`, `ithemes-security`, `better-wp-security`, `sucuri-scanner`, `sg-security`, `wp-cerber`, `shield-security`, `defender-security`, `loginizer`, `limit-login-attempts-reloaded`, `two-factor-authentication`
+**Security & login:**
+- `all-in-one-wp-security-and-firewall`
+- `anti-malware`
+- `better-wp-security`
+- `bulletproof-security`
+- `defender-security`
+- `ithemes-security`
+- `jetpack`
+- `limit-login-attempts-reloaded`
+- `loginizer`
+- `malcare-security`
+- `miniorange-2-factor-authentication`
+- `really-simple-ssl`
+- `secupress`
+- `security-ninja`
+- `sg-security`
+- `shield-security`
+- `solid-security`
+- `sucuri-scanner`
+- `two-factor-authentication`
+- `wp-cerber`
+- `wp-hide-security-enhancer`
+- `wps-hide-login`
+- `wordfence`
 
-**Caching & performance:** `w3-total-cache`, `litespeed-cache`, `wp-super-cache`, `wp-fastest-cache`, `sg-cachepress`, `wp-rocket`, `autoptimize`, `wp-optimize`, `breeze`, `hummingbird-performance`, `imagify`, `nginx-helper`, `phastpress`, `redis-cache`
+**Caching & performance:**
+- `autoptimize`
+- `breeze`
+- `comet-cache`
+- `flying-press`
+- `hummingbird-performance`
+- `imagify`
+- `litespeed-cache`
+- `nginx-helper`
+- `nitropack`
+- `phastpress`
+- `redis-cache`
+- `sg-cachepress`
+- `swift-performance`
+- `swift-performance-lite`
+- `w3-total-cache`
+- `wp-fastest-cache`
+- `wp-optimize`
+- `wp-rocket`
+- `wp-super-cache`
 
-**Other:** `redirection`, `simple-301-redirects`, `safe-svg`
+**Other:**
+- `redirection`
+- `safe-svg`
+- `simple-301-redirects`
 
 These are only deactivated on the target. Your source site is never touched.
 
