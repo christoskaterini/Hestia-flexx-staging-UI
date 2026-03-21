@@ -78,22 +78,23 @@ $sourceArg   = escapeshellarg($sourceDomain);
 $targetArg   = escapeshellarg($targetDomain);
 $syncArg     = escapeshellarg($syncMode);
 
-// all three actions route through the same script so sudoers only needs one entry
+// HESTIA_CMD is defined in main.php as "/usr/bin/sudo /usr/local/hestia/bin/"
+// using it means we ride Hestia's existing sudoers rules — no custom entry needed
 if ($action === 'wp_check') {
-    $cmd = "sudo /usr/local/hestia/bin/v-flexx-staging --user $usernameArg --source $sourceArg --wp-check 2>&1";
+    $cmd = HESTIA_CMD . "v-flexx-staging --user $usernameArg --source $sourceArg --wp-check 2>&1";
 
 } elseif ($action === 'wp_login') {
-    $cmd = "sudo /usr/local/hestia/bin/v-flexx-staging --user $usernameArg --source $sourceArg --wp-login 2>&1";
+    $cmd = HESTIA_CMD . "v-flexx-staging --user $usernameArg --source $sourceArg --wp-login 2>&1";
 
 } else {
     $createFlag = $createNew ? '--create-target' : '';
-    $cmd = "sudo /usr/local/hestia/bin/v-flexx-staging --user $usernameArg --source $sourceArg --target $targetArg --sync $syncArg $createFlag 2>&1";
+    $cmd = HESTIA_CMD . "v-flexx-staging --user $usernameArg --source $sourceArg --target $targetArg --sync $syncArg $createFlag 2>&1";
 }
 
-$rawOutput = shell_exec($cmd) ?? '';
-$trimmed   = trim($rawOutput);
-$lines     = array_map('trim', explode("\n", $trimmed));
-$lastLine  = trim(end($lines));
+exec($cmd, $outputLines, $returnCode);
+$rawOutput = implode("\n", $outputLines);
+$trimmed  = trim($rawOutput);
+$lastLine = trim(end($outputLines));
 
 header('Content-Type: application/json');
 

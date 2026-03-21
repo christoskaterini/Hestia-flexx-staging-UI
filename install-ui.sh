@@ -55,29 +55,6 @@ cp "$SCRIPT_DIR/flexx-staging.sh" "/usr/local/hestia/bin/v-flexx-staging"
 chown root:root "/usr/local/hestia/bin/v-flexx-staging"
 chmod 755 "/usr/local/hestia/bin/v-flexx-staging"
 
-# sudoers — the PHP API runs as the web user (www-data) and needs to call
-# v-flexx-staging as root. without this entry the tool installs fine but
-# every sync silently fails with a permission error.
-SUDOERS_FILE="/etc/sudoers.d/flexx-staging"
-SUDOERS_LINE="www-data ALL=(root) NOPASSWD: /usr/local/hestia/bin/v-flexx-staging"
-
-echo "--> Configuring sudoers..."
-if [ -f "$SUDOERS_FILE" ] && grep -qF "$SUDOERS_LINE" "$SUDOERS_FILE"; then
-    echo "    Sudoers entry already present. Skipping."
-else
-    echo "$SUDOERS_LINE" > "$SUDOERS_FILE"
-    chmod 440 "$SUDOERS_FILE"
-
-    # validate the file before committing — a bad sudoers entry can lock out root
-    if visudo -cf "$SUDOERS_FILE" &>/dev/null; then
-        echo "    Sudoers entry added."
-    else
-        echo "ERROR: Generated sudoers file failed validation. Removing."
-        rm -f "$SUDOERS_FILE"
-        exit 1
-    fi
-fi
-
 echo ""
 echo "=========================================="
 echo "         INSTALLATION COMPLETE!           "

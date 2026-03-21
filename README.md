@@ -30,7 +30,6 @@ Always take a manual database backup before pushing staging back to production.
 ## Installation
 
 ```bash
-rm -rf /tmp/Hestia-flexx-staging-UI && \
 git clone https://github.com/christoskaterini/Hestia-flexx-staging-UI.git /tmp/Hestia-flexx-staging-UI
 cd /tmp/Hestia-flexx-staging-UI
 sudo bash install-ui.sh
@@ -42,7 +41,6 @@ The installer:
 3. Copies `flexx_custom.js` → `/usr/local/hestia/web/js/custom_scripts/`
 4. Copies `flexx_api.php` → `/usr/local/hestia/web/api/`
 5. Copies `flexx-staging.sh` → `/usr/local/hestia/bin/v-flexx-staging`
-6. Creates a sudoers entry so the panel can call the script as root
 
 After installing, hard-refresh the Hestia panel (**Ctrl+F5**).
 
@@ -118,7 +116,6 @@ The sync will work, but security and caching plugins will be deactivated on live
 rm -f /usr/local/hestia/web/js/custom_scripts/flexx_custom.js
 rm -f /usr/local/hestia/web/api/flexx_api.php
 rm -f /usr/local/hestia/bin/v-flexx-staging
-rm -f /etc/sudoers.d/flexx-staging
 rm -rf /tmp/Hestia-flexx-staging-UI
 ```
 
