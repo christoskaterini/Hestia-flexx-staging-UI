@@ -142,8 +142,8 @@ if [ "$WP_LOGIN" = true ]; then
     TOKEN=$(head -c 32 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 32)
     LOGIN_FILE="flexx-login-${TOKEN}.php"
 
-    # sets auth cookie then redirects to wp-admin, deletes itself on first hit
-    cat > "$SOURCE_PATH/$LOGIN_FILE" <<PHPEOF
+    # write the file directly as the site user so there's no ownership transition gap
+    su -s /bin/bash "$HESTIA_USER" -c "cat > '$SOURCE_PATH/$LOGIN_FILE'" <<PHPEOF
 <?php
 define('WP_USE_THEMES', false);
 require_once __DIR__ . '/wp-load.php';
@@ -158,9 +158,14 @@ if (\$user) {
 wp_die('Login failed: user not found.');
 PHPEOF
 
-    # file was created as root — hand it back to the site user
-    chown "$HESTIA_USER":"$HESTIA_USER" "$SOURCE_PATH/$LOGIN_FILE"
     chmod 644 "$SOURCE_PATH/$LOGIN_FILE"
+
+    # wait for filesystem to settle and verify the file is actually readable
+    sleep 1
+    if [ ! -r "$SOURCE_PATH/$LOGIN_FILE" ]; then
+        echo "ERROR: Login file was created but is not readable. Check permissions."
+        exit 1
+    fi
 
     SITE_URL=$(run_wp option get siteurl --quiet 2>/dev/null | tr -d '[:space:]')
     if [ -z "$SITE_URL" ]; then
@@ -387,21 +392,11 @@ if [ "$SYNC_TYPE" == "2" ] || [ "$SYNC_TYPE" == "3" ]; then
     echo "--> Database sync complete."
 
     if [ "$CREATE_TARGET" = true ] && [ "$PROTOCOL" = "https://" ]; then
-    	echo ""
-    	echo "=========================================="
-    	echo "  ⚠️  SSL REQUIRED FOR STAGING SITE"
-    	echo "=========================================="
-    	echo "  Staging URL set to https://$TARGET_DOM"
-    	echo "  to match your live site."
-    	echo ""
-    	echo "  If SSL is not enabled the site will"
-    	echo "  not load. Enable it now:"
-    	echo ""
-    	echo "  HestiaCP → Web → $TARGET_DOM → SSL"
-    	echo "  → Enable Let's Encrypt"
-    	echo "=========================================="
-    	echo ""
-	fi
+        echo ""
+        echo "⚠️  IMPORTANT: Staging site URL was set to https:// to match your live site."
+        echo "    If SSL is not yet enabled on $TARGET_DOM the site will not load."
+        echo "    Go to HestiaCP → Web → $TARGET_DOM → SSL and enable Let's Encrypt."
+    fi
 fi
 
 if [ "$SYNC_TYPE" != "1" ] && [ "$SYNC_TYPE" != "2" ] && [ "$SYNC_TYPE" != "3" ]; then
