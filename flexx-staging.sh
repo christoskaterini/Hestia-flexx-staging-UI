@@ -148,20 +148,20 @@ if [ "$WP_LOGIN" = true ]; then
 define('WP_USE_THEMES', false);
 require_once __DIR__ . '/wp-load.php';
 \$user = get_user_by('login', '${WP_USER}');
-unlink(__FILE__);
 if (\$user) {
     wp_set_current_user(\$user->ID);
     wp_set_auth_cookie(\$user->ID, true);
     wp_redirect(admin_url());
     exit;
 }
+unlink(__FILE__);
 wp_die('Login failed: user not found.');
 PHPEOF
 
     chmod 644 "$SOURCE_PATH/$LOGIN_FILE"
 
     # wait for filesystem to settle and verify the file is actually readable
-    sleep 1
+    sleep 2
     if [ ! -r "$SOURCE_PATH/$LOGIN_FILE" ]; then
         echo "ERROR: Login file was created but is not readable. Check permissions."
         exit 1
